@@ -10,7 +10,7 @@ public class BaseTest {
     // Playwright instance to manage browser automation
     protected Playwright playwright;
 
-    // Browser instance (Chromium, Firefox, WebKit)
+    // Browser instance (Chromium, Firefox, WebKits)
     protected Browser browser;
 
     // Browser context for isolated sessions (like separate browser profiles)
