@@ -12,44 +12,42 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '11'
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # Install Playwright browsers
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      # Run Maven tests (Allure results will be generated)
       - name: Run tests
         run: mvn clean test -Dallure.results.directory=target/allure-results
 
-      # Upload Allure results (VERY IMPORTANT)
+      # ✅ Upload Allure results
       - name: Upload Allure results
-        if: always()   # upload even if tests fail
-        uses: actions/upload-artifact@v3
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: allure-results
           path: target/allure-results
 
-      # (Optional but impressive) Generate Allure HTML report
+      # ✅ Generate Allure HTML report
       - name: Generate Allure report
         if: always()
         run: mvn allure:report
 
-      # Upload Allure HTML report
+      # ✅ Upload Allure HTML report
       - name: Upload Allure report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: target/allure-report
