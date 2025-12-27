@@ -32,7 +32,7 @@ public class BaseTest {
 
         // Launch Chromium browser in non-headless mode
         browser = playwright.chromium().launch(
-                new BrowserType.LaunchOptions().setHeadless(false)
+                new BrowserType.LaunchOptions().setHeadless(true)
         );
 
         // Create a new browser context (isolated session)
