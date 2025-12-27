@@ -25,8 +25,31 @@ jobs:
         with:
           node-version: '20'
 
+      # Install Playwright browsers
       - name: Install Playwright browsers
-        run: npx playwright install
+        run: npx playwright install --with-deps
 
+      # Run Maven tests (Allure results will be generated)
       - name: Run tests
-        run: mvn clean test
+        run: mvn clean test -Dallure.results.directory=target/allure-results
+
+      # Upload Allure results (VERY IMPORTANT)
+      - name: Upload Allure results
+        if: always()   # upload even if tests fail
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-results
+          path: target/allure-results
+
+      # (Optional but impressive) Generate Allure HTML report
+      - name: Generate Allure report
+        if: always()
+        run: mvn allure:report
+
+      # Upload Allure HTML report
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: target/allure-report

@@ -1,0 +1,49 @@
+“How did you fix Playwright dependency issue?”
+
+Answer:
+
+The issue occurred because Playwright dependency was missing in pom.xml.
+I added the official Playwright Maven dependency, refreshed Maven, and ran a clean install to resolve classpath issues.
+
+
+
+
+If interviewer asks:
+
+“How do you capture screenshots on failure in Playwright?”
+
+Answer:
+
+I implemented a TestNG listener that listens to test failures.
+On failure, it accesses the Playwright Page instance from BaseTest and captures a full-page screenshot with a timestamp.
+This improves debugging and reporting.
+
+
+mvn clean test -Dallure.results.directory=target/allure-results
+
+
+mvn allure:serve
+
+
+
+Interview-Ready Explanation
+
+“Initially my GitHub Actions pipeline failed because Playwright UI tests were running in headed mode. I fixed it by switching to headless execution for CI runners and ensuring application URLs are accessible. After that, tests ran successfully on every push.”
+
+
+
+“I integrated Allure reporting into GitHub Actions. After each test run, the CI pipeline generates an Allure HTML report and uploads it as an artifact so the QA team can download and review detailed execution results.”
+
+
+
+✔ Why continue-on-error: true?
+
+Ensures Allure report is generated even if tests fail
+
+✔ Why headless browser?
+
+GitHub runners don’t support UI display
+
+✔ Why artifacts?
+
+GitHub Pages requires extra setup; artifacts are faster and safer

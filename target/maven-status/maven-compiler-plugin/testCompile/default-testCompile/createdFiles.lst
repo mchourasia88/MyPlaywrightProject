@@ -1,5 +1,5 @@
 base\BaseTest.class
-utils\ConfigReader.class
-tests\LoginTest.class
 pages\LoginPage.class
 listeners\TestListener.class
+utils\ConfigReader.class
+tests\LoginTest.class
