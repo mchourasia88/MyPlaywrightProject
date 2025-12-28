@@ -2,53 +2,36 @@ pipeline {
     agent any
 
     tools {
-        jdk 'JDK11'
-        maven 'Maven3'
-        allure 'Allure'
-    }
-
-    environment {
-        CI = 'true'
+        jdk 'jdk-17.0.12'
+        maven 'Maven'
     }
 
     stages {
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/mchourasia88/MyPlaywrightProject.git'
+                checkout scm
             }
         }
 
-        stage('Install Playwright Browsers') {
+        stage('Build & Test') {
             steps {
-                sh 'npx playwright install --with-deps'
+                sh 'mvn clean test -Dallure.results.directory=target/allure-results'
             }
         }
 
-        stage('Run Automation Tests') {
+        stage('Allure Report') {
             steps {
-                sh '''
-                    mvn clean test -Dallure.results.directory=target/allure-results
-                '''
+                allure([
+                    results: [[path: 'target/allure-results']]
+                ])
             }
         }
     }
 
     post {
         always {
-            allure(
-                includeProperties: false,
-                results: [[path: 'target/allure-results']]
-            )
-        }
-
-        failure {
-            echo '❌ Tests failed. Please check Allure report.'
-        }
-
-        success {
-            echo '✅ Tests executed successfully.'
+            archiveArtifacts artifacts: '**/target/surefire-reports/*.xml', allowEmptyArchive: true
         }
     }
 }
