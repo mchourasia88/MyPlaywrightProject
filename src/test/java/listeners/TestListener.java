@@ -33,7 +33,7 @@ public class TestListener implements ITestListener {
                     .setPath(Paths.get(screenshotPath))
                     .setFullPage(true));
 
-            System.out.println("Screenshot saved at: " + screenshotPath);
+            System.out.println("Screenshot saved at location: " + screenshotPath);
 
             // Attach screenshot to Allure report
             byte[] screenshotBytes = Files.readAllBytes(Paths.get(screenshotPath));
