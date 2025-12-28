@@ -20,18 +20,19 @@ pipeline {
             }
         }
 
-        stage('Allure Report') {
+        stage('Publish Allure Report') {
             steps {
-                allure([
-                    results: [[path: 'target/allure-results']]
-                ])
+                allureReport(
+                    name: 'Allure Report',
+                    path: 'target/allure-results'
+                )
             }
         }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: '**/target/surefire-reports/*.xml', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'target/allure-results/**', allowEmptyArchive: true
         }
     }
 }
