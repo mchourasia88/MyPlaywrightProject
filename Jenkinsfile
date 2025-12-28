@@ -14,7 +14,7 @@ pipeline {
             }
         }
 
-        stage('Build & Test') {
+        stage('Run Tests') {
             steps {
                 bat 'mvn clean test -Dallure.results.directory=target\\allure-results'
             }
@@ -22,10 +22,11 @@ pipeline {
 
         stage('Publish Allure Report') {
             steps {
-                allureReport(
-                    name: 'Allure Report',
-                    path: 'target/allure-results'
-                )
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'target/allure-results']]
+                ])
             }
         }
     }
