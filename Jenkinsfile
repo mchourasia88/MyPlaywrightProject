@@ -16,7 +16,7 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                sh 'mvn clean test -Dallure.results.directory=target/allure-results'
+                bat 'mvn clean test -Dallure.results.directory=target\\allure-results'
             }
         }
 
