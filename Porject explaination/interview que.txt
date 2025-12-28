@@ -47,3 +47,8 @@ GitHub runners don’t support UI display
 ✔ Why artifacts?
 
 GitHub Pages requires extra setup; artifacts are faster and safer
+
+
+
+
+https://chatgpt.com/share/695124a3-5888-8002-b8bb-c90b5189487e

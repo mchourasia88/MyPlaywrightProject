@@ -28,6 +28,6 @@ public class LoginTest extends BaseTest {
         );
 
         // Step 4: Verify logout button is visible
-        Assert.assertTrue(loginPage.isLogoutVisible(), "Logout button should be visible after login");
+        Assert.assertTrue(loginPage.isLogoutVisible(), "Logout button should be visible after login.");
     }
 }
