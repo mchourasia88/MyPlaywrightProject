@@ -23,7 +23,7 @@ mvn clean test -Dallure.results.directory=target/allure-results
 
 
 mvn allure:serve
-
+mvn spring-boot:run
 
 
 Interview-Ready Explanation
