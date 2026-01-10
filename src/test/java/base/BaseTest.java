@@ -1,60 +1,91 @@
 package base;
 
-import com.microsoft.playwright.*; // Playwright classes for browser automation
-import org.testng.annotations.AfterMethod; // TestNG annotation: runs after each test method
-import org.testng.annotations.BeforeMethod; // TestNG annotation: runs before each test method
-import utils.ConfigReader; // Utility to read configuration properties like URL
+import com.microsoft.playwright.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import utils.ConfigReader;
 
 public class BaseTest {
 
-    // Playwright instance to manage browser automation
     protected Playwright playwright;
-
-    // Browser instance (Chromium, Firefox, WebKit)
     protected Browser browser;
-
-    // Browser context for isolated sessions (like separate browser profiles)
     protected BrowserContext context;
-
-    // Page object representing a tab in the browser
     protected Page page;
 
-    // Getter method to allow access to 'page' from other classes or listeners
+    // Expose page for listeners or child classes
     public Page getPage() {
         return page;
     }
 
-    // Runs before each TestNG test method
     @BeforeMethod
     public void setUp() {
+
+        // Read runtime parameters (UI / Jenkins / CLI)
+        String browserName = System.getProperty("browser", "chromium");
+        boolean headless = Boolean.parseBoolean(
+                System.getProperty("headless", "false")
+        );
+
+        System.out.println("Launching browser: " + browserName);
+        System.out.println("Headless mode: " + headless);
+
         // Initialize Playwright
         playwright = Playwright.create();
 
-        // Launch Chromium browser in non-headless mode
-        browser = playwright.chromium().launch(
-                new BrowserType.LaunchOptions().setHeadless(true)
-        );
+        // Launch browser based on input
+        switch (browserName.toLowerCase()) {
 
-        // Create a new browser context (isolated session)
+            case "firefox":
+                browser = playwright.firefox().launch(
+                        new BrowserType.LaunchOptions()
+                                .setHeadless(headless)
+                );
+                break;
+
+            case "webkit":
+                browser = playwright.webkit().launch(
+                        new BrowserType.LaunchOptions()
+                                .setHeadless(headless)
+                );
+                break;
+
+            default:
+                browser = playwright.chromium().launch(
+                        new BrowserType.LaunchOptions()
+                                .setHeadless(headless)
+                );
+        }
+
+        // Create isolated browser context
         context = browser.newContext();
 
-        // Open a new page (tab) in the context
+        // Create new page
         page = context.newPage();
 
-        // Navigate to the URL specified in the configuration file
-        page.navigate(ConfigReader.get("url"));
+        // Navigate to application URL
+        String appUrl = ConfigReader.get("url");
+        page.navigate(appUrl);
+
+        System.out.println("Navigated to URL: " + appUrl);
     }
 
-    // Runs after each TestNG test method
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown() {
-        // Close the browser context
-        context.close();
 
-        // Close the browser
-        browser.close();
+        System.out.println("Closing browser resources...");
 
-        // Close the Playwright instance
-        playwright.close();
+        // Safe cleanup to avoid NullPointerException
+        if (page != null) {
+            page.close();
+        }
+        if (context != null) {
+            context.close();
+        }
+        if (browser != null) {
+            browser.close();
+        }
+        if (playwright != null) {
+            playwright.close();
+        }
     }
 }
