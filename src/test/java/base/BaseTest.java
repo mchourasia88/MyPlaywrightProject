@@ -30,7 +30,7 @@ public class BaseTest {
         // Initialize Playwright
         playwright = Playwright.create();
 
-        // Launch Chromium browser in non-headless mode
+        // Launch Chromium browser in non-headless mode.
         browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions().setHeadless(false)
         );
