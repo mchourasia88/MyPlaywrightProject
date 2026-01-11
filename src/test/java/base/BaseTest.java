@@ -27,7 +27,7 @@ public class BaseTest {
     // Runs before each TestNG test method
     @BeforeMethod
     public void setUp() {
-        // Initialize Playwright
+        // Initialize Playwright.
         playwright = Playwright.create();
 
         // Launch Chromium browser in non-headless mode.
